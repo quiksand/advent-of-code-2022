@@ -22,17 +22,6 @@ class TopNCalorieTracker:
             idx += 1
         self.tracker = tracker
 
-    # def insert(self, calories):
-    #     def get_index():
-    #         for index, value in enumerate(self.tracker):
-    #             if calories >= value:
-    #                 continue
-    #             else:
-    #                 return index
-    #     index = get_index()
-    #     if index:
-    #         self.tracker = (self.tracker[:index] + [calories] + self.tracker[index:])[:n]
-
     def total(self):
         return sum(self.tracker)
 
