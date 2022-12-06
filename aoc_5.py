@@ -63,12 +63,16 @@ def solve_part_1(input_data):
     return ''.join(stack[-1] for stack in stacks if stack)
 
 def solve_part_2(input_data):
-    pass
+    stacks, instructions = parse_input(input_data)
+    for move, from_stack, to_stack in instructions:
+        for i in range(move):
+            stacks[to_stack].append(stacks[from_stack].pop(-(move - i)))
+    return ''.join(stack[-1] for stack in stacks if stack)
 
 
 if __name__ == '__main__':
-    input_data = get_test_data()
-    # input_data = get_input_data()
+    # input_data = get_test_data()
+    input_data = get_input_data()
     answer_part_1 = solve_part_1(input_data)
     answer_part_2 = solve_part_2(input_data)
     print(f'The answer for part 1 is {answer_part_1}')
