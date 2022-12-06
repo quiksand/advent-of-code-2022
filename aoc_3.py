@@ -1,4 +1,5 @@
 
+from re import A
 import dotenv
 import os
 import requests
@@ -39,9 +40,30 @@ def solve_part_1(packing_list, priority_map):
     priorities = ( priority_map[item] for item in duplicates )
     return sum(priorities)
 
+def get_group_lists(packing_list):
+    elf_per_group = 3
+    group = []
+    for count, rucksack in enumerate(packing_list.splitlines(), 1):
+        group.append(rucksack)
+        if count % elf_per_group == 0:
+            yield group
+            group = []
+
+def get_duplicated_group_items(group):
+    return set.intersection(*[set([*rucksack]) for rucksack in group]).pop()
+
+def solve_part_2(packing_list, priority_map):
+    groups = ( group for group in get_group_lists(packing_list) )
+    duplicates = ( get_duplicated_group_items(group) for group in groups )
+    priorities = ( priority_map[item] for item in duplicates )
+    return sum(priorities)
+
+
 if __name__ == '__main__':
     # packing_list = get_test_data()
     packing_list = get_input_data()
     priority_map = get_priority_map()
-    priority_sums = solve_part_1(packing_list, priority_map)
-    print(f'The answer for part 1 is {priority_sums}')
+    priority_sums_1 = solve_part_1(packing_list, priority_map)
+    priority_sums_2 = solve_part_2(packing_list, priority_map)
+    print(f'The answer for part 1 is {priority_sums_1}')
+    print(f'The answer for part 2 is {priority_sums_2}')
