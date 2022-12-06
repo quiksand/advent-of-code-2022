@@ -1,5 +1,4 @@
 
-from re import A
 import dotenv
 import os
 import requests
