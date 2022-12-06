@@ -1,5 +1,4 @@
 
-from ast import parse
 import dotenv
 import os
 import re
@@ -36,14 +35,6 @@ def parse_instructions(line):
     match = re.match(regex, line)
     return ( int(match.group(1)), int(match.group(2)) - 1, int(match.group(3)) -1 )
 
-def get_stacks(starting_rows):
-    stacks = [ [] for _ in range(len(starting_rows[0])) ]
-    for row in starting_rows[::-1]:
-        for index, value in enumerate(row):
-            if value != ' ':
-                stacks[index].append(value)
-    return stacks
-
 def parse_input(input_data):
     starting_rows = []
     instructions = []
@@ -54,6 +45,14 @@ def parse_input(input_data):
             instructions.append(parse_instructions(line))
     starting_stacks = get_stacks(starting_rows)
     return starting_stacks, instructions
+
+def get_stacks(starting_rows):
+    stacks = [[] for _ in range(len(starting_rows[0]))]
+    for row in starting_rows[::-1]:
+        for index, value in enumerate(row):
+            if value != ' ':
+                stacks[index].append(value)
+    return stacks
 
 def solve_part_1(input_data):
     stacks, instructions = parse_input(input_data)
