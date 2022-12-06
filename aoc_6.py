@@ -41,7 +41,11 @@ def solve_part_1(input_data):
             return stream_window.length
 
 def solve_part_2(input_data):
-    pass
+    stream_window = StreamWindow(14)
+    for char in input_data:
+        stream_window.add(char)
+        if stream_window.detect_start():
+            return stream_window.length
 
 
 if __name__ == '__main__':
