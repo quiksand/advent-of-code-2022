@@ -1,7 +1,6 @@
 
 import dotenv
 import os
-import re
 import requests
 
 
@@ -11,15 +10,15 @@ DAY = 6
 class StreamWindow:
     def __init__(self, size):
         self.size = size
-        self.length = 0
+        self.processed = 0
         self.window = [None] * size
 
     def add(self, value):
-        self.length += 1
+        self.processed += 1
         self.window = self.window[1:] + [value]
     
     def detect_start(self):
-        return len(set(self.window)) == self.size and self.length >= self.size
+        return len(set(self.window)) == self.size and self.processed >= self.size
 
 
 def get_test_data():
@@ -38,14 +37,14 @@ def solve_part_1(input_data):
     for char in input_data:
         stream_window.add(char)
         if stream_window.detect_start():
-            return stream_window.length
+            return stream_window.processed
 
 def solve_part_2(input_data):
     stream_window = StreamWindow(14)
     for char in input_data:
         stream_window.add(char)
         if stream_window.detect_start():
-            return stream_window.length
+            return stream_window.processed
 
 
 if __name__ == '__main__':
