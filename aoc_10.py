@@ -165,11 +165,30 @@ def get_input_data():
     return session.get(f'https://adventofcode.com/2022/day/{DAY}/input').text
 
 
+class Crt:
+    def __init__(self, height=6, width=40):
+        self.height = height
+        self.width = width
+        self.screen = [['.'] * width for _ in range(height)]
+
+    def draw(self, cycle, sprite_x_pos):
+        x = cycle % self.width
+        y = cycle // self.width
+        if abs(sprite_x_pos - x) < 2:
+            self.screen[y][x] = '#'
+
+    def show(self):
+        print()
+        for row in self.screen:
+            print(''.join(row))
+
+
 class Cpu:
     def __init__(self):
         self.sig_strengths = []
         self.register = 1
         self.cycle_count = 0
+        self.crt = Crt()
 
     def parse_cmds(self, raw_cmds):
         return (raw_cmd.split(' ') for raw_cmd in raw_cmds.splitlines())
@@ -184,10 +203,11 @@ class Cpu:
 
     def run(self, cmds):
         for cmd in self.parse_cmds(cmds):
-            if cmd[0] == 'noop':
-                self.noop()
-            else:
-                self.addx(int(cmd[1]))
+            match cmd[0]:
+                case 'noop':
+                    self.noop()
+                case 'addx':
+                    self.addx(int(cmd[1]))
 
     def sig_time(self):
         return (self.cycle_count - 20) % 40 == 0
@@ -195,23 +215,30 @@ class Cpu:
     def calculate_signal_strength(self):
         self.sig_strengths.append(self.register * self.cycle_count)
 
+    def hcf(self):
+        raise Exception('crash')
+
     def cycle(self):
+        self.crt.draw(self.cycle_count, self.register)
         self.cycle_count += 1
         if self.sig_time():
             self.calculate_signal_strength()
+
 
 def solve_part_1(input_data):
     cpu = Cpu()
     cpu.run(input_data)
     return sum(cpu.sig_strengths)
 
-
 def solve_part_2(input_data):
-    return
+    cpu = Cpu()
+    cpu.run(input_data)
+    cpu.crt.show()
+    # EGJBGCFK
 
 if __name__ == '__main__':
-    input_data = get_test_data()
-    # input_data = get_input_data()
+    # input_data = get_test_data()
+    input_data = get_input_data()
     answer_part_1 = solve_part_1(input_data)
     answer_part_2 = solve_part_2(input_data)
     print(f'The answer for part 1 is {answer_part_1}')
